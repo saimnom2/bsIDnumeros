@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Armazenar e Consultar ID</title>
+</head>
+<body>
+  <h1>Armazenar e Consultar ID</h1>
+
+  <h2>Armazenar Número</h2>
+  <input type="text" id="store-id" placeholder="ID">
+  <input type="text" id="store-number" placeholder="Número">
+  <button onclick="storeNumber()">Armazenar</button>
+
+  <h2>Consultar Número</h2>
+  <input type="text" id="query-id" placeholder="ID">
+  <button onclick="queryNumber()">Consultar</button>
+
+  <p id="result"></p>
+
+  <script>
+    async function storeNumber() {
+      const id = document.getElementById('store-id').value;
+      const numero = document.getElementById('store-number').value;
+
+      const response = await fetch('/api/store', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, numero })
+      });
+
+      const result = await response.json();
+      document.getElementById('result').innerText = result.message || result.error;
+    }
+
+    async function queryNumber() {
+      const id = document.getElementById('query-id').value;
+      const response = await fetch(`/api/query?id=${id}`);
+      const result = await response.json();
+      document.getElementById('result').innerText = result.numero || result.error;
+    }
+  </script>
+</body>
+</html>
